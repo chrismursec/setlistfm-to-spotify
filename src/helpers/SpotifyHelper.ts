@@ -24,6 +24,16 @@ class SpotifyHelper {
     }
   }
 
+  public async extractArtist(url: string): Promise<any> {
+    const html = await this.fetchHtml(url);
+    if (html) {
+      const $ = cheerio.load(html);
+      const artist = $('meta[property="qc:artist"]').attr("content");
+      return artist;
+    }
+    return null;
+  }
+
   public async extractSongLabels(url: string): Promise<string[]> {
     const html = await this.fetchHtml(url);
     if (html) {
@@ -66,7 +76,7 @@ class SpotifyHelper {
 
   public async searchSpotifyTrack(
     trackName: string,
-    artist: string,
+    artist: string | null,
     accessToken: string
   ): Promise<string | null> {
     const searchOptions: AxiosRequestConfig = {

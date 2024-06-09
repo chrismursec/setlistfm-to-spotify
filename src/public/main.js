@@ -18,7 +18,6 @@ const SpotifyApp = (function () {
   }
 
   function createPlaylist() {
-    const artistName = document.getElementById("artist-name").value;
     const setlistFmLink = document.getElementById("setlistfm-link").value;
     const playlistName = document.getElementById("playlist-name").value;
 
@@ -31,7 +30,6 @@ const SpotifyApp = (function () {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        artistName,
         playlistName,
         setlistFmLink,
         accessToken,

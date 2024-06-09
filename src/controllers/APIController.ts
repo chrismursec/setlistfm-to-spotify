@@ -51,12 +51,6 @@ class APIController {
       });
 
       const userDetails = {
-        displayName: userResponse.data.display_name,
-        email: userResponse.data.email,
-        imageUrl:
-          userResponse.data.images.length > 0
-            ? userResponse.data.images[0].url
-            : null,
         accessToken: accessToken,
       };
 
@@ -77,11 +71,12 @@ class APIController {
     let userAccessToken = req.body.accessToken;
     let setlistFmLink = req.body.setlistFmLink;
     let playlistName = req.body.playlistName;
-    let artistName = req.body.artistName;
 
     const url = setlistFmLink;
 
     const songLabels = await this.spotifyHelper.extractSongLabels(url);
+    const artistName = await this.spotifyHelper.extractArtist(url);
+    console.log(artistName);
 
     const accessToken = await this.spotifyHelper.getSpotifyAccessToken();
     if (!accessToken) return;

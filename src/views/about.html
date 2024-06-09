@@ -37,49 +37,14 @@
     </header>
 
     <div class="container">
-      <h1 class="title">SetlistFM to Spotify</h1>
-      <h6 class="subtitle">
-        Automatically import setlists from
-        <a href="https://www.setlist.fm/" target="_blank">setlistfm</a> straight
-        to your own Spotify playlist!
-      </h6>
+      <h1 class="title">About SetlistFM to Spotify</h1>
 
-      <div id="login-section">
-        <button class="login-btn" onclick="SpotifyApp.login()">
-          Login with Spotify
-        </button>
-      </div>
-
-      <div id="playlist-section" style="display: none">
-        <div class="input-group">
-          <input
-            type="text"
-            id="setlistfm-link"
-            class="input-field"
-            placeholder="setlist.fm link"
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="text"
-            id="playlist-name"
-            class="input-field"
-            placeholder="Playlist Name"
-          />
-        </div>
-
-        <button class="create-btn" onclick="SpotifyApp.createPlaylist()">
-          Create Playlist
-        </button>
-      </div>
-
-      <div id="success-message" style="display: none">
-        <h1 class="title">Success lol</h1>
-      </div>
-
-      <div id="fail-message" style="display: none">
-        <h1 class="title">Failed lol</h1>
-      </div>
+      <p class="about-info">
+        Welcome! This is SetlistFM to Spotify. Login with your spotify account
+        and then paste in a link from SetlistFM for us to automatically create a
+        playlist with the tracks. Get ready for your next gig by bumping the
+        songs beforehand.
+      </p>
     </div>
 
     <footer>
@@ -96,7 +61,6 @@
       integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
       crossorigin="anonymous"
     ></script>
-    <script src="/public/main.js"></script>
     <script
       src="https://kit.fontawesome.com/f7c7bda0f8.js"
       crossorigin="anonymous"

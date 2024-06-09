@@ -37,49 +37,27 @@
     </header>
 
     <div class="container">
-      <h1 class="title">SetlistFM to Spotify</h1>
-      <h6 class="subtitle">
-        Automatically import setlists from
-        <a href="https://www.setlist.fm/" target="_blank">setlistfm</a> straight
-        to your own Spotify playlist!
-      </h6>
+      <h1 class="title">Privacy Policy</h1>
 
-      <div id="login-section">
-        <button class="login-btn" onclick="SpotifyApp.login()">
-          Login with Spotify
-        </button>
-      </div>
+      <p class="about-info">
+        SetlistFM to Spotify is an open-source project that allows users to
+        import setlists from setlist.fm to their Spotify account. We do not
+        store any user data on our servers. The only data we store is the user's
+        Spotify access token in their browser's local storage. This token is
+        used to make requests to the Spotify API on behalf of the user. We do
+        not have access to the user's Spotify account or any other personal
+        information.
+      </p>
 
-      <div id="playlist-section" style="display: none">
-        <div class="input-group">
-          <input
-            type="text"
-            id="setlistfm-link"
-            class="input-field"
-            placeholder="setlist.fm link"
-          />
-        </div>
-        <div class="input-group">
-          <input
-            type="text"
-            id="playlist-name"
-            class="input-field"
-            placeholder="Playlist Name"
-          />
-        </div>
-
-        <button class="create-btn" onclick="SpotifyApp.createPlaylist()">
-          Create Playlist
-        </button>
-      </div>
-
-      <div id="success-message" style="display: none">
-        <h1 class="title">Success lol</h1>
-      </div>
-
-      <div id="fail-message" style="display: none">
-        <h1 class="title">Failed lol</h1>
-      </div>
+      <p class="about-info">
+        You can revoke access to this app at any time by logging into your
+        spotify account and visiting
+        <a
+          href="http://www.spotify.com/account/apps/?_ga=2.57194153.2059435232.1677244602-1044990631.1616788427"
+          target="_blank"
+          >your apps page</a
+        >.
+      </p>
     </div>
 
     <footer>
@@ -96,7 +74,6 @@
       integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
       crossorigin="anonymous"
     ></script>
-    <script src="/public/main.js"></script>
     <script
       src="https://kit.fontawesome.com/f7c7bda0f8.js"
       crossorigin="anonymous"

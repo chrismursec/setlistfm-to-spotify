@@ -14,6 +14,16 @@ class DocumentRoutes {
       const filePath = path.join(__dirname, "../views/index.html");
       res.sendFile(filePath);
     });
+
+    this.router.get("/about", (req, res) => {
+      const filePath = path.join(__dirname, "../views/about.html");
+      res.sendFile(filePath);
+    });
+
+    this.router.get("/privacy", (req, res) => {
+      const filePath = path.join(__dirname, "../views/privacy.html");
+      res.sendFile(filePath);
+    });
   }
 
   public getRouter(): Router {
