@@ -1,0 +1,125 @@
+body {
+  font-family: "nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.title,
+.subtitle {
+  text-align: center;
+  color: black;
+  font-weight: bold;
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-family: "nunito", sans-serif;
+}
+
+.create-btn,
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: larger;
+}
+
+.create-btn:hover,
+.login-btn:hover {
+  background-color: #169c4f;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.navbar {
+  background-color: transparent;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  padding: 0 2em !important;
+  position: sticky;
+  color: black;
+}
+
+.navbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 10px;
+  text-align: right;
+}
+
+.navbar ul li {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar ul li a:hover {
+  color: #1cb955;
+}
+
+.navbar-text {
+  font-size: 1.2rem !important;
+}
+
+.navbar-icon {
+  font-size: 24px;
+  color: black;
+}
+
+footer {
+  background-color: #f2f2f2;
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: black;
+}
+
+.about-info {
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+a {
+  color: #85b145;
+  text-decoration: none;
+}

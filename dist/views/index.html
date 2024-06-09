@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SetlistFM to Spotify</title>
+    <link rel="stylesheet" href="/public/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <ul>
+          <li class="navbar-text navbar-left">
+            <a href="/">Home</a>
+          </li>
+          <li class="navbar-text navbar-left">
+            <a href="/about">About</a>
+          </li>
+          <li class="navbar-text navbar-left">
+            <a href="/privacy">Privacy</a>
+          </li>
+          <li class="navbar-icon navbar-right">
+            <a
+              href="https://github.com/chrismursec/setlistfm-to-spotify"
+              target="_blank"
+              ><i class="fab fa-github"></i
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1 class="title">SetlistFM to Spotify</h1>
+      <h6 class="subtitle">
+        Automatically import setlists from
+        <a href="https://www.setlist.fm/" target="_blank">setlistfm</a> straight
+        to your own Spotify playlist!
+      </h6>
+
+      <div id="login-section">
+        <button class="login-btn" onclick="SpotifyApp.login()">
+          Login with Spotify
+        </button>
+      </div>
+
+      <div id="playlist-section" style="display: none">
+        <div class="input-group">
+          <input
+            type="text"
+            id="setlistfm-link"
+            class="input-field"
+            placeholder="setlist.fm link"
+          />
+        </div>
+        <div class="input-group">
+          <input
+            type="text"
+            id="playlist-name"
+            class="input-field"
+            placeholder="Playlist Name"
+          />
+        </div>
+
+        <button class="create-btn" onclick="SpotifyApp.createPlaylist()">
+          Create Playlist
+        </button>
+      </div>
+
+      <div id="success-message" style="display: none">
+        <h1 class="title">Success lol</h1>
+      </div>
+
+      <div id="fail-message" style="display: none">
+        <h1 class="title">Failed lol</h1>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        Built with ❤️ by
+        <a href="https://github.com/chrismursec/" target="_blank"
+          >@chrismursec</a
+        >
+      </p>
+    </footer>
+
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/public/main.js"></script>
+    <script
+      src="https://kit.fontawesome.com/f7c7bda0f8.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
