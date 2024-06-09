@@ -1,7 +1,9 @@
+import { config } from "dotenv";
 import express, { Express, json, urlencoded } from "express";
-// import AuthRoutes from "./routes/AuthRoutes";
+import path from "path";
 import APIRoutes from "./routes/APIRoutes";
 import DocumentRoutes from "./routes/DocumentRoutes";
+config(); // Load .env file content into process.env
 
 const app: Express = express();
 
@@ -11,10 +13,10 @@ app.use(
     extended: true,
   })
 );
-app.use(express.static("public"));
+
+app.use("/public", express.static(path.join(__dirname, "/public")));
 
 app.use("/", DocumentRoutes);
 app.use("/api", APIRoutes);
-// app.use("/api/auth", AuthRoutes);
 
 export default app;

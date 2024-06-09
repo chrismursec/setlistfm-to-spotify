@@ -1,26 +1,21 @@
-import dotenv from "dotenv";
-import { Router } from "express";
+import { config } from "dotenv";
+import { Request, Response, Router } from "express";
 import request from "request";
-import {
-  addTracksToSpotifyPlaylist,
-  createSpotifyPlaylist,
-  extractSongLabels,
-  getSpotifyAccessToken,
-  getSpotifyUserId,
-  searchSpotifyTrack,
-} from "./helpers/spotify-helpers";
-dotenv.config();
+import APIController from "../controllers/APIController";
 
+config();
 class APIRoutes {
   private router: Router;
+  private apiController: APIController;
 
   constructor() {
     this.router = Router();
     this.initRoutes();
+    this.apiController = new APIController();
   }
 
   private initRoutes(): void {
-    this.router.get("/callback", (req, res) => {
+    this.router.get("/callback", (req: Request, res: Response) => {
       const code = req.query.code;
       console.log(code);
 
@@ -84,52 +79,9 @@ class APIRoutes {
       });
     });
 
-    this.router.post("/create-playlist", async (req, res) => {
-      let userAccessToken = req.body.accessToken;
-      let setlistFmLink = req.body.setlistFmLink;
-      let playlistName = req.body.playlistName;
-      let artistName = req.body.artistName;
-
-      const url = setlistFmLink; // Replace with the URL you want to fetch
-
-      // Step 1: Extract song labels from setlist.fm
-      const songLabels = await extractSongLabels(url);
-      // console.log("Song Labels:", songLabels);
-
-      // Step 2: Get Spotify access token
-      const accessToken = await getSpotifyAccessToken();
-      if (!accessToken) return;
-      // console.log("Access Token:", accessToken);
-
-      const userId = await getSpotifyUserId(userAccessToken);
-      console.log("User ID:", userId);
-
-      // // Step 3: Search for tracks on Spotify and collect track IDs
-      const trackIds = [];
-      for (const label of songLabels) {
-        const trackId = await searchSpotifyTrack(
-          label,
-          artistName,
-          accessToken
-        );
-        if (trackId) {
-          trackIds.push(trackId);
-        }
-      }
-
-      // console.log(trackIds);
-
-      // // // Step 4: Create a new Spotify playlist
-      const playlistId = await createSpotifyPlaylist(
-        userId,
-        playlistName,
-        userAccessToken
-      );
-      if (!playlistId) return;
-
-      // // // Step 5: Add tracks to Spotify playlist
-      await addTracksToSpotifyPlaylist(playlistId, trackIds, userAccessToken);
-    });
+    this.router.post("/create-playlist", async (req: Request, res: Response) =>
+      this.apiController.createPlaylist(req, res)
+    );
   }
 
   public getRouter(): Router {

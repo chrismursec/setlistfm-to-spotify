@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 import dotenv from "dotenv";
 dotenv.config();
 
-export async function fetchHtml(url: any) {
+export const fetchHtml = async (url: string) => {
   try {
     const response = await axios.get(url);
     return response.data;
@@ -11,10 +11,10 @@ export async function fetchHtml(url: any) {
     console.error(`Could not fetch the page: ${error}`);
     return null;
   }
-}
+};
 
 // Step 2: Extract song labels from setlist.fm
-export async function extractSongLabels(url: any) {
+export const extractSongLabels = async (url: any) => {
   const html = await fetchHtml(url);
   if (html) {
     const $ = cheerio.load(html);
@@ -28,10 +28,10 @@ export async function extractSongLabels(url: any) {
     return songLabels;
   }
   return [];
-}
+};
 
 // Step 3: Get Spotify access token
-export async function getSpotifyAccessToken() {
+export const getSpotifyAccessToken = async () => {
   const authOptions = {
     method: "post",
     url: "https://accounts.spotify.com/api/token",
@@ -55,14 +55,14 @@ export async function getSpotifyAccessToken() {
     console.error("Error fetching Spotify access token:", error);
     return null;
   }
-}
+};
 
 // Step 4: Search for track on Spotify
-export async function searchSpotifyTrack(
+export const searchSpotifyTrack = async (
   trackName: any,
   artist: any,
   accessToken: any
-) {
+) => {
   const searchOptions = {
     method: "get",
     url: `https://api.spotify.com/v1/search`,
@@ -84,14 +84,14 @@ export async function searchSpotifyTrack(
     console.error("Error searching for track on Spotify:", error);
     return null;
   }
-}
+};
 
 // Step 5: Create a new playlist
-export async function createSpotifyPlaylist(
+export const createSpotifyPlaylist = async (
   userId: any,
   playlistName: any,
   userAccessToken: any
-) {
+) => {
   console.log("user access token", userAccessToken);
   const createOptions = {
     method: "post",
@@ -113,14 +113,14 @@ export async function createSpotifyPlaylist(
     console.error("Error creating Spotify playlist:", error);
     return null;
   }
-}
+};
 
 // Step 6: Add tracks to playlist
-export async function addTracksToSpotifyPlaylist(
+export const addTracksToSpotifyPlaylist = async (
   playlistId: any,
   trackIds: any,
   accessToken: any
-) {
+) => {
   const addOptions = {
     method: "post",
     url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
@@ -139,9 +139,9 @@ export async function addTracksToSpotifyPlaylist(
   } catch (error) {
     console.error("Error adding tracks to Spotify playlist:", error);
   }
-}
+};
 
-export async function getSpotifyUserId(accessToken: any) {
+export const getSpotifyUserId = async (accessToken: any) => {
   const userProfileOptions = {
     method: "get",
     url: "https://api.spotify.com/v1/me",
@@ -157,4 +157,4 @@ export async function getSpotifyUserId(accessToken: any) {
     console.error("Error fetching Spotify user ID:", error.response.data);
     return null;
   }
-}
+};

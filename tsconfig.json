@@ -12,7 +12,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/public/**/*",
+    "public/**/*",
+    "views/**/*",
   ],
   "exclude": [
     "node_modules"

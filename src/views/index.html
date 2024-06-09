@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotify Login</title>
+    <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css" />
+  </head>
+  <body>
+    <h1>Spotify Login</h1>
+    <button onclick="login()">Login with Spotify</button>
+
+    <hr />
+
+    <input type="text" id="artist-name" placeholder="Artist Name" />
+    <input type="text" id="setlistfm-link" placeholder="setlist.fm link" />
+    <input type="text" id="playlist-name" placeholder="Playlist Name" />
+
+    <button onclick="createPlaylist()">Create Playlist</button>
+
+    <div id="userDetails"></div>
+
+    <script src="/public/main.js"></script>
+  </body>
+</html>
