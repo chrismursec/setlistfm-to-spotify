@@ -1,6 +1,6 @@
 const SpotifyApp = (function () {
   const clientId = "ba38ec33ae97465b860a00e2ac28a9fa";
-  const redirectUri = "http://localhost:8080/api/callback";
+  const redirectUri = "https://setlistfm-to-spotify.onrender.com/api/callback";
   const scope = "user-read-private user-read-email playlist-modify-public";
 
   function redirectToAuthorization() {
