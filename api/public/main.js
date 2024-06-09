@@ -24,17 +24,20 @@ const SpotifyApp = (function () {
     const userDetails = JSON.parse(localStorage.getItem("spotifyUserDetails"));
     const accessToken = userDetails.accessToken;
 
-    fetch("http://localhost:8080/api/create-playlist", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playlistName,
-        setlistFmLink,
-        accessToken,
-      }),
-    })
+    fetch(
+      "https://setlistfm-to-spotify-jvfb14479-chrismursecs-projects.vercel.app/api/create-playlist",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playlistName,
+          setlistFmLink,
+          accessToken,
+        }),
+      }
+    )
       .then((response) => {
         if (response.status === 200) {
           document.getElementById("playlist-section").style.display = "none";
