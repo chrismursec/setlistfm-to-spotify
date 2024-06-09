@@ -1,17 +1,77 @@
+import axios from "axios";
 import dotenv from "dotenv";
 import { Request, Response } from "express";
-import {
-  addTracksToSpotifyPlaylist,
-  createSpotifyPlaylist,
-  extractSongLabels,
-  getSpotifyAccessToken,
-  getSpotifyUserId,
-  searchSpotifyTrack,
-} from "../routes/helpers/spotify-helpers";
+import SpotifyHelper from "../helpers/SpotifyHelper";
 dotenv.config();
 
 class APIController {
-  constructor() {}
+  private spotifyHelper: SpotifyHelper = new SpotifyHelper();
+  constructor() {
+    this.spotifyHelper = new SpotifyHelper();
+  }
+
+  public async loginCallback(req: Request, res: Response): Promise<void> {
+    const code = req.query.code;
+    console.log(code);
+
+    if (!code) {
+      res.status(400).json({ error: "Missing authorization code" });
+      return;
+    }
+
+    try {
+      const tokenResponse = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        new URLSearchParams({
+          code: code as string,
+          redirect_uri: process.env.SPOTIFY_REDIRECT_URI!,
+          grant_type: "authorization_code",
+        }),
+        {
+          headers: {
+            Authorization:
+              "Basic " +
+              Buffer.from(
+                process.env.SPOTIFY_CLIENT_ID! +
+                  ":" +
+                  process.env.SPOTIFY_CLIENT_SECRET!
+              ).toString("base64"),
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      const { access_token: accessToken, refresh_token: refreshToken } =
+        tokenResponse.data;
+
+      const userResponse = await axios.get("https://api.spotify.com/v1/me", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const userDetails = {
+        displayName: userResponse.data.display_name,
+        email: userResponse.data.email,
+        imageUrl:
+          userResponse.data.images.length > 0
+            ? userResponse.data.images[0].url
+            : null,
+        accessToken: accessToken,
+      };
+
+      res.redirect(
+        `/?userDetails=${encodeURIComponent(JSON.stringify(userDetails))}`
+      );
+    } catch (error: any) {
+      console.error(
+        "Error in login callback:",
+        error.response?.data || error.message
+      );
+      const statusCode = error.response?.status || 500;
+      res.status(statusCode).json({ error: "An unexpected error occurred" });
+    }
+  }
 
   public async createPlaylist(req: Request, res: Response): Promise<void> {
     let userAccessToken = req.body.accessToken;
@@ -21,35 +81,39 @@ class APIController {
 
     const url = setlistFmLink;
 
-    //Step 1: Extract song labels from setlist.fm
-    const songLabels = await extractSongLabels(url);
+    const songLabels = await this.spotifyHelper.extractSongLabels(url);
 
-    //Step 2: Get Spotify access token
-    const accessToken = await getSpotifyAccessToken();
+    const accessToken = await this.spotifyHelper.getSpotifyAccessToken();
     if (!accessToken) return;
 
-    const userId = await getSpotifyUserId(userAccessToken);
+    const userId = await this.spotifyHelper.getSpotifyUserId(userAccessToken);
     console.log("User ID:", userId);
 
-    //Step 3: Search for tracks on Spotify and collect track IDs
     const trackIds = [];
     for (const label of songLabels) {
-      const trackId = await searchSpotifyTrack(label, artistName, accessToken);
+      const trackId = await this.spotifyHelper.searchSpotifyTrack(
+        label,
+        artistName,
+        accessToken
+      );
       if (trackId) {
         trackIds.push(trackId);
       }
     }
 
-    //Step 4: Create a new Spotify playlist
-    const playlistId = await createSpotifyPlaylist(
+    const playlistId = await this.spotifyHelper.createSpotifyPlaylist(
       userId,
       playlistName,
       userAccessToken
     );
     if (!playlistId) return;
 
-    //Step 5: Add tracks to Spotify playlist
-    await addTracksToSpotifyPlaylist(playlistId, trackIds, userAccessToken);
+    await this.spotifyHelper.addTracksToSpotifyPlaylist(
+      playlistId,
+      trackIds,
+      userAccessToken
+    );
+    res.status(200).json({ success: "Playlist created successfully" });
   }
 }
 

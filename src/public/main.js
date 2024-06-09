@@ -23,10 +23,7 @@ function saveUserDetailsToLocalStorage(userDetails) {
 // Check if the URL contains user details
 const userDetails = getQueryParams();
 if (userDetails) {
-  // Save user details to local storage
   saveUserDetailsToLocalStorage(userDetails);
-  // Redirect the user to some other page if needed
-  // window.location.href = "/some_other_page.html";
 }
 
 function createPlaylist() {
@@ -51,11 +48,20 @@ function createPlaylist() {
       accessToken: accessToken,
     }),
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
+    .then((response) => {
+      if (response.status === 200) {
+        // hide form and show success message
+        document.getElementById("playlist-section").style.display = "none";
+        document.getElementById("success-message").style.display = "block";
+      } else {
+      }
     })
     .catch((error) => {
       console.error("Error:", error);
     });
+}
+
+if (localStorage.getItem("spotifyUserDetails")) {
+  document.getElementById("login-section").style.display = "none";
+  document.getElementById("playlist-section").style.display = "block";
 }
