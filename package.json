@@ -7,7 +7,7 @@
     "start": "nodemon",
     "build": "yarn clean && tsc && yarn copy-files",
     "clean": "rm -rf ./api",
-    "copy-files": "cp -r ./src/public/ ./api/public && cp -r ./src/views/ ./api/views"
+    "copy-files": "cp -r ./src/public/ ./dist/public && cp -r ./src/views/ ./dist/views"
   },
   "keywords": [],
   "author": "",
