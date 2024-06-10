@@ -21,6 +21,18 @@ class APIRoutes {
     this.router.post("/create-playlist", async (req: Request, res: Response) =>
       this.apiController.createPlaylist(req, res)
     );
+
+    this.router.post(
+      "/manual-create-playlist",
+      async (req: Request, res: Response) =>
+        this.apiController.manualCreatePlaylist(req, res)
+    );
+
+    this.router.post(
+      "/manual-submit-playlist",
+      async (req: Request, res: Response) =>
+        this.apiController.manualSubmitPlaylist(req, res)
+    );
   }
 
   public getRouter(): Router {

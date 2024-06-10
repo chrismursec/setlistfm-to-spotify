@@ -102,6 +102,24 @@ class SpotifyHelper {
     }
   }
 
+  public async getTrack(trackId: string, accessToken: string): Promise<any> {
+    const trackOptions: AxiosRequestConfig = {
+      method: "get",
+      url: `https://api.spotify.com/v1/tracks/${trackId}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    try {
+      const response = await axios(trackOptions);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching track from Spotify:", error);
+      return null;
+    }
+  }
+
   public async createSpotifyPlaylist(
     userId: string | null,
     playlistName: string,

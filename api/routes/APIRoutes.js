@@ -16,6 +16,8 @@ class APIRoutes {
     initRoutes() {
         this.router.get("/callback", (req, res) => this.apiController.loginCallback(req, res));
         this.router.post("/create-playlist", async (req, res) => this.apiController.createPlaylist(req, res));
+        this.router.post("/manual-create-playlist", async (req, res) => this.apiController.manualCreatePlaylist(req, res));
+        this.router.post("/manual-submit-playlist", async (req, res) => this.apiController.manualSubmitPlaylist(req, res));
     }
     getRouter() {
         return this.router;

@@ -6,5 +6,4 @@ dotenv.config();
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(process.env.SPOTIFY_CLIENT_ID);
 });

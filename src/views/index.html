@@ -29,29 +29,36 @@
             <a
               href="https://github.com/chrismursec/setlistfm-to-spotify"
               target="_blank"
-              ><i class="fab fa-github"></i
-            ></a>
+              aria-label="GitHub"
+            >
+              <i class="fab fa-github"></i>
+            </a>
           </li>
         </ul>
       </nav>
     </header>
 
-    <div class="container">
-      <h1 class="title">SetlistFM to Spotify</h1>
-      <h6 class="subtitle">
-        Automatically import setlists from
-        <a href="https://www.setlist.fm/" target="_blank">setlistfm</a> straight
-        to your own Spotify playlist!
-      </h6>
+    <main class="container">
+      <section id="site-info">
+        <h1 class="title">SetlistFM to Spotify</h1>
+        <p class="subtitle">
+          Automatically import setlists from
+          <a href="https://www.setlist.fm/" target="_blank" rel="noopener"
+            >setlist.fm</a
+          >
+          straight to your own Spotify playlist!
+        </p>
+      </section>
 
-      <div id="login-section">
+      <section id="login-section">
         <button class="login-btn" onclick="SpotifyApp.login()">
           Login with Spotify
         </button>
-      </div>
+      </section>
 
-      <div id="playlist-section" style="display: none">
+      <section id="playlist-section" style="display: none">
         <div class="input-group">
+          <label for="setlistfm-link" class="sr-only">Setlist.fm Link</label>
           <input
             type="text"
             id="setlistfm-link"
@@ -60,6 +67,7 @@
           />
         </div>
         <div class="input-group">
+          <label for="playlist-name" class="sr-only">Playlist Name</label>
           <input
             type="text"
             id="playlist-name"
@@ -68,24 +76,45 @@
           />
         </div>
 
-        <button class="create-btn" onclick="SpotifyApp.createPlaylist()">
-          Create Playlist
-        </button>
-      </div>
+        <div id="playlist-button-group" class="button-group">
+          <button
+            id="quick-create-button"
+            class="create-btn"
+            onclick="SpotifyApp.createPlaylist()"
+          >
+            Quick Create
+          </button>
+          <button
+            id="manual-create-button"
+            class="create-btn"
+            onclick="SpotifyApp.manualCreatePlaylist()"
+          >
+            Manual Create
+          </button>
+        </div>
+      </section>
 
-      <div id="success-message" style="display: none">
-        <h1 class="title">Success lol</h1>
-      </div>
+      <section id="tracklist" style="display: none"></section>
 
-      <div id="fail-message" style="display: none">
-        <h1 class="title">Failed lol</h1>
-      </div>
-    </div>
+      <section
+        id="progress-bar"
+        style="display: none"
+        aria-label="Progress"
+      ></section>
+
+      <section id="success-message" style="display: none">
+        <h2 class="title">Success! <a href="/">Try another?</a></h2>
+      </section>
+
+      <section id="fail-message" style="display: none">
+        <h2 class="title">Failed! <a href="/">Refresh?</a></h2>
+      </section>
+    </main>
 
     <footer>
       <p>
         Built with ❤️ by
-        <a href="https://github.com/chrismursec/" target="_blank"
+        <a href="https://github.com/chrismursec/" target="_blank" rel="noopener"
           >@chrismursec</a
         >
       </p>

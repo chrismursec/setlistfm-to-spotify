@@ -6,13 +6,9 @@ dotenv.config();
 
 class APIController {
   private spotifyHelper: SpotifyHelper = new SpotifyHelper();
-  constructor() {
-    this.spotifyHelper = new SpotifyHelper();
-  }
 
   public async loginCallback(req: Request, res: Response): Promise<void> {
-    const code = req.query.code;
-    console.log(code);
+    const code = req.query.code as string;
 
     if (!code) {
       res.status(400).json({ error: "Missing authorization code" });
@@ -23,36 +19,24 @@ class APIController {
       const tokenResponse = await axios.post(
         "https://accounts.spotify.com/api/token",
         new URLSearchParams({
-          code: code as string,
+          code,
           redirect_uri: process.env.SPOTIFY_REDIRECT_URI!,
           grant_type: "authorization_code",
         }),
         {
           headers: {
-            Authorization:
-              "Basic " +
-              Buffer.from(
-                process.env.SPOTIFY_CLIENT_ID! +
-                  ":" +
-                  process.env.SPOTIFY_CLIENT_SECRET!
-              ).toString("base64"),
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.SPOTIFY_CLIENT_ID!}:${process.env
+                .SPOTIFY_CLIENT_SECRET!}`
+            ).toString("base64")}`,
             "Content-Type": "application/x-www-form-urlencoded",
           },
         }
       );
 
-      const { access_token: accessToken, refresh_token: refreshToken } =
-        tokenResponse.data;
+      const { access_token: accessToken } = tokenResponse.data;
 
-      const userResponse = await axios.get("https://api.spotify.com/v1/me", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const userDetails = {
-        accessToken: accessToken,
-      };
+      const userDetails = { accessToken };
 
       res.redirect(
         `/?userDetails=${encodeURIComponent(JSON.stringify(userDetails))}`
@@ -62,53 +46,134 @@ class APIController {
         "Error in login callback:",
         error.response?.data || error.message
       );
-      const statusCode = error.response?.status || 500;
-      res.status(statusCode).json({ error: "An unexpected error occurred" });
+      res
+        .status(error.response?.status || 500)
+        .json({ error: "An unexpected error occurred" });
     }
   }
 
-  public async createPlaylist(req: Request, res: Response): Promise<void> {
-    let userAccessToken = req.body.accessToken;
-    let setlistFmLink = req.body.setlistFmLink;
-    let playlistName = req.body.playlistName;
-
+  private async processTracks(
+    setlistFmLink: string,
+    userAccessToken: string
+  ): Promise<{ trackIds: string[]; artistName: string }> {
     const url = setlistFmLink;
-
     const songLabels = await this.spotifyHelper.extractSongLabels(url);
     const artistName = await this.spotifyHelper.extractArtist(url);
-    console.log(artistName);
 
     const accessToken = await this.spotifyHelper.getSpotifyAccessToken();
-    if (!accessToken) return;
+    if (!accessToken) throw new Error("Failed to get Spotify access token");
 
+    const trackIds = await Promise.all(
+      songLabels.map(async (label) => {
+        const trackId = await this.spotifyHelper.searchSpotifyTrack(
+          label,
+          artistName,
+          accessToken
+        );
+        return trackId || "";
+      })
+    );
+
+    return { trackIds: trackIds.filter((id) => id !== ""), artistName };
+  }
+
+  private async createPlaylistOnSpotify(
+    userAccessToken: string,
+    playlistName: string,
+    trackIds: string[]
+  ): Promise<string | null> {
     const userId = await this.spotifyHelper.getSpotifyUserId(userAccessToken);
-    console.log("User ID:", userId);
-
-    const trackIds = [];
-    for (const label of songLabels) {
-      const trackId = await this.spotifyHelper.searchSpotifyTrack(
-        label,
-        artistName,
-        accessToken
-      );
-      if (trackId) {
-        trackIds.push(trackId);
-      }
-    }
-
     const playlistId = await this.spotifyHelper.createSpotifyPlaylist(
       userId,
       playlistName,
       userAccessToken
     );
-    if (!playlistId) return;
+    if (!playlistId) return null;
 
     await this.spotifyHelper.addTracksToSpotifyPlaylist(
       playlistId,
       trackIds,
       userAccessToken
     );
-    res.status(200).json({ success: "Playlist created successfully" });
+    return playlistId;
+  }
+
+  public async manualCreatePlaylist(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { accessToken, setlistFmLink, playlistName } = req.body;
+      const { trackIds, artistName } = await this.processTracks(
+        setlistFmLink,
+        accessToken
+      );
+
+      const trackObjects = await Promise.all(
+        trackIds.map((trackId) =>
+          this.spotifyHelper.getTrack(trackId, accessToken)
+        )
+      );
+
+      let html = trackObjects
+        .map(
+          (trackObject) => `
+        <div class="track" data-trackid="${trackObject.id}">
+          <div class="track-image"><img src="${trackObject.album.images[0].url}" alt="${trackObject.name}"></div>
+          <div class="track-details">
+            <div class="track-info track-name">${trackObject.name}</div>
+            <div class="track-info track-album">${trackObject.album.name}</div>
+          </div>
+          <input type="checkbox" name="track" value="${trackObject.id}" class="track-checkbox">
+        </div>`
+        )
+        .join("");
+
+      html += `<button class="create-btn" id="manual-submit" onclick="SpotifyApp.manualCreatePlaylistSubmit()">Create Playlist</button>`;
+
+      res.status(200).send(html);
+    } catch (error: any) {
+      console.error("Error in manualCreatePlaylist:", error.message);
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  }
+
+  public async manualSubmitPlaylist(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { trackIds, accessToken, playlistName } = req.body;
+      const playlistId = await this.createPlaylistOnSpotify(
+        accessToken,
+        playlistName,
+        trackIds
+      );
+      if (!playlistId) throw new Error("Failed to create playlist");
+
+      res.status(200).json({ success: "Playlist created successfully" });
+    } catch (error: any) {
+      console.error("Error in manualSubmitPlaylist:", error.message);
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
+  }
+
+  public async createPlaylist(req: Request, res: Response): Promise<void> {
+    try {
+      const { accessToken, setlistFmLink, playlistName } = req.body;
+      const { trackIds } = await this.processTracks(setlistFmLink, accessToken);
+      const playlistId = await this.createPlaylistOnSpotify(
+        accessToken,
+        playlistName,
+        trackIds
+      );
+      if (!playlistId) throw new Error("Failed to create playlist");
+
+      res.status(200).json({ success: "Playlist created successfully" });
+    } catch (error: any) {
+      console.error("Error in createPlaylist:", error.message);
+      res.status(500).json({ error: "An unexpected error occurred" });
+    }
   }
 }
 

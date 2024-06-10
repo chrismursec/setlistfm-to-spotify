@@ -90,6 +90,23 @@ class SpotifyHelper {
             return null;
         }
     }
+    async getTrack(trackId, accessToken) {
+        const trackOptions = {
+            method: "get",
+            url: `https://api.spotify.com/v1/tracks/${trackId}`,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        };
+        try {
+            const response = await (0, axios_1.default)(trackOptions);
+            return response.data;
+        }
+        catch (error) {
+            console.error("Error fetching track from Spotify:", error);
+            return null;
+        }
+    }
     async createSpotifyPlaylist(userId, playlistName, userAccessToken) {
         const createOptions = {
             method: "post",
