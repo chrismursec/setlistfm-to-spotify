@@ -1,7 +1,7 @@
 const SpotifyApp = (function () {
   const clientId = "ba38ec33ae97465b860a00e2ac28a9fa";
   const redirectUri = "https://setlistfm-to-spotify.onrender.com/api/callback"; // Change to production URL when needed
-  const scope = "user-read-private user-read-email playlist-modify-public";
+  const scope = "user-read-private playlist-modify-public";
 
   const apiEndpoints = {
     createPlaylist:
