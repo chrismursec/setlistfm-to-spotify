@@ -10,8 +10,17 @@
 		"copy-files": "cp -r ./src/public/ ./dist/public && cp -r ./src/views/ ./dist/views",
 		"prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
 	},
-	"keywords": [],
-	"author": "",
+	"keywords": [
+		"spotify",
+		"setlistfm",
+		"playlist",
+		"music",
+		"generator",
+		"typescript",
+		"express",
+		"cheerio"
+	],
+	"author": "Chris Mursec",
 	"license": "ISC",
 	"devDependencies": {
 		"@eslint/js": "^9.4.0",
