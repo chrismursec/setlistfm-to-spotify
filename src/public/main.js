@@ -1,12 +1,12 @@
 const SpotifyApp = (function () {
 	const clientId = 'ba38ec33ae97465b860a00e2ac28a9fa';
-	const redirectUri = 'http://localhost:8080/api/callback'; // Change to production URL when needed
+	const redirectUri = 'https://setlistfm-to-spotify.onrender.com/api/callback'; // Change to production URL when needed
 	const scope = 'user-read-private playlist-modify-public';
 
 	const apiEndpoints = {
-		createPlaylist: 'http://localhost:8080/api/create-playlist',
-		manualCreatePlaylist: 'http://localhost:8080/api/manual-create-playlist',
-		manualSubmitPlaylist: 'http://localhost:8080/api/manual-submit-playlist'
+		createPlaylist: 'https://setlistfm-to-spotify.onrender.com/api/create-playlist',
+		manualCreatePlaylist: 'https://setlistfm-to-spotify.onrender.com/api/manual-create-playlist',
+		manualSubmitPlaylist: 'https://setlistfm-to-spotify.onrender.com/api/manual-submit-playlist'
 	};
 
 	function redirectToAuthorization() {

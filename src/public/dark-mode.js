@@ -11,6 +11,7 @@ document.getElementById('theme_toggle').addEventListener('click', function () {
 });
 
 window.addEventListener('DOMContentLoaded', (event) => {
+	event.preventDefault();
 	if (localStorage.getItem('theme') === 'dark') {
 		document.body.classList.add('dark-theme');
 		document.querySelector('nav').classList.add('dark-theme');
